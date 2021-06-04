@@ -1,5 +1,6 @@
 package com.example.drivex.data.repository
 
+import android.icu.text.CaseMap
 import androidx.lifecycle.LiveData
 import com.example.drivex.data.model.Refuel
 
@@ -10,4 +11,5 @@ interface RefuelRepository {
     suspend fun addRefuel(refuel: Refuel)
     suspend fun getSumOfExpenses(): LiveData<Double>
     suspend fun getLastMileage(): LiveData<Int>
+    suspend fun getSumByTittle(title: String): LiveData<Int>
 }

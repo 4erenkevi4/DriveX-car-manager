@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <fragment
+    <com.google.android.gms.maps.MapView
         android:id="@+id/mapGoogle"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"

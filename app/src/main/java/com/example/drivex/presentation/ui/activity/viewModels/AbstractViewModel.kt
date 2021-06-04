@@ -27,7 +27,6 @@ init {
         db.refuelDao()
     }
 
-
      suspend fun readAllDataByDate(): List<Refuel> {
         return refuelRepository.getAllRefuel()
     }
@@ -35,8 +34,6 @@ init {
      fun readRefuelById(id:Long): LiveData<Refuel> {
         return refuelRepository.getRefuelById(id)
     }
-
-
 
      fun addRefuel(refuel: Refuel) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,6 +46,18 @@ init {
         }
     }
 
+    fun sum(title: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            refuelRepository.getSumByTittle(title)
+        }
+    }
+
+    val allExpenses: LiveData<Int> = Transformations.map(refuelDao.getSumOfExpenses()) {sumOfCosts ->
+        sumOfCosts.toInt()
+    }
+
+
+
     val allExpensesSum: LiveData<String> = Transformations.map(refuelDao.getSumOfExpenses()) { sumOfCosts ->
         NumberFormat.getCurrencyInstance(Locale("ru", "BY")).format(sumOfCosts?: 0.0)
     }
@@ -60,10 +69,13 @@ init {
         NumberFormat.getCurrencyInstance(Locale("ru", "BY")).format(sumOfCosts?: 0.0)
     }
 
+
     val refuelSum: LiveData<Int> = refuelDao.getSUmExpensesById("Заправка")
     val serviceSum: LiveData<Int> = refuelDao.getSUmExpensesById("Сервис")
     val shoppingSum: LiveData<Int> = refuelDao.getSUmExpensesById("Покупка")
     val paymentsSum: LiveData<Int> = refuelDao.getSUmExpensesById("Платеж")
+
+
 
     private val allFuelVolumeSumInt: LiveData<Int> = refuelDao.getSummVolumeById("Заправка")
     val allFuelVolumeSum: LiveData<String> = Transformations.map(allFuelVolumeSumInt){ summ ->

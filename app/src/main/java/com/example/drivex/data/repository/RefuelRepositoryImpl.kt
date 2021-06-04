@@ -34,7 +34,9 @@ class RefuelRepositoryImpl(application: Application) :
         return refuelDao.getLastMileage()
     }
 
-
+    override suspend fun getSumByTittle(title: String): LiveData<Int> {
+        return refuelDao.getSumByTittle(title)
+    }
 
 
 }

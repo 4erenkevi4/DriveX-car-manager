@@ -9,10 +9,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.drivex.R
 import com.example.drivex.data.model.MapModels
 import com.example.drivex.presentation.ui.map.MapViewModel
@@ -23,7 +19,6 @@ import com.google.android.gms.maps.*
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import timber.log.Timber
 import java.util.*
@@ -54,7 +49,7 @@ class MapsActivity : AppCompatActivity() {
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.mapGoogle) as SupportMapFragment
+            .findFragmentById(R.id.mapGoogles) as SupportMapFragment
         mapFragment.getMapAsync {
             mMap = it
             addAllPolylines()
@@ -213,7 +208,7 @@ class MapsActivity : AppCompatActivity() {
                 bounds.include(point)
             }
         }
-        val mapView = findViewById<MapView>(R.id.mapView)
+        val mapView = findViewById<MapView>(R.id.mapGoogle)
         val width = mapView?.width
         val height = mapView?.height
         mMap?.moveCamera(

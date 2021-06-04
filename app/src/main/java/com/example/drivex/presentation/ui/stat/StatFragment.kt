@@ -20,7 +20,7 @@ import com.example.drivex.presentation.ui.activity.viewModels.AbstractViewModel
 class StatFragment : Fragment() {
 
     private lateinit var statViewModel: StatViewModel
-    lateinit var liveDataCost: LiveData<String>
+    lateinit var liveDataCost: LiveData<Int>
     lateinit var liveDataMileage: LiveData<String>
     lateinit var liveDataRefuelSum: LiveData<Int>
     lateinit var liveDataServiceSum: LiveData<Int>
@@ -28,8 +28,8 @@ class StatFragment : Fragment() {
     lateinit var liveDataPaymentSum: LiveData<Int>
     private lateinit var viewModel: AbstractViewModel
     private lateinit var pieChart: PieChart
-    lateinit var text1:TextView
-    lateinit var text2:TextView
+    lateinit var text1: TextView
+    lateinit var text2: TextView
     lateinit var button: Button
 
     override fun onCreateView(
@@ -41,53 +41,51 @@ class StatFragment : Fragment() {
             ViewModelProvider(this).get(StatViewModel::class.java)
         viewModel = ViewModelProvider(this).get(AbstractViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_stat, container, false)
+
+
+        liveDataCost = viewModel.allExpenses
+        liveDataMileage = viewModel.lastMileageStr
         text1 = root.findViewById(R.id.text_stat)
-        text2= root.findViewById(R.id.text_stat2)
+        text2 = root.findViewById(R.id.text_stat2)
+        liveDataCost.observe(viewLifecycleOwner, {
+            text1.text = it.toString()
+        })
+        liveDataMileage.observe(viewLifecycleOwner, { text2.text = it })
         pieChart = root.findViewById(R.id.pieChart)
-        var expRefuel = 0
-        var expService = 0
+        var expRefuel = text1.text.toString()
+        var expService = text2.text.toString()
         var expShopping = 0
         var expPayment = 0
         liveDataRefuelSum = viewModel.refuelSum
         liveDataServiceSum = viewModel.serviceSum
         liveDataShoppingSum = viewModel.shoppingSum
         liveDataPaymentSum = viewModel.paymentsSum
-        liveDataShoppingSum.observe(viewLifecycleOwner,{text2.text=it.toString()})
-        liveDataPaymentSum.observe(viewLifecycleOwner,{expPayment})
         liveDataRefuelSum.observe(viewLifecycleOwner,
-            { text1.text = it.toString()})
+            { text1.text = it.toString() })
 
         button = root.findViewById(R.id.button2)
-        liveDataCost = viewModel.allExpensesSum
-        liveDataMileage = viewModel.lastMileageStr
-        //liveDataCost.observe(viewLifecycleOwner, { textView.text = "Общие расходы: $it" })
-        //liveDataMileage.observe(viewLifecycleOwner, { textView2.text = "Пробег: $it" })
 
-        val ExpensesList = arrayListOf<Int>(expService,expShopping,expPayment
-        )
-
-        val s1 = Segment("S1", expRefuel)
-        val s2 = Segment("S1", liveDataServiceSum.value)
-        val s3 = Segment("S1", liveDataShoppingSum.value)
-        val s4 = Segment("S1", liveDataPaymentSum.value)
+        val s1 = Segment("S1", expRefuel.toDouble())
+        val s2 = Segment("S1", expService.toInt())
+        val s3 = Segment("S1", 1)
+        val s4 = Segment("S1", 1)
 
         val sf1 = SegmentFormatter(Color.BLUE)
         val sf2 = SegmentFormatter(Color.YELLOW)
         val sf3 = SegmentFormatter(Color.CYAN)
         val sf4 = SegmentFormatter(Color.MAGENTA)
 
-        pieChart.addSegment(s1,sf1)
-        pieChart.addSegment(s2,sf2)
-        pieChart.addSegment(s3,sf3)
-        pieChart.addSegment(s4,sf4)
+        pieChart.addSegment(s1, sf1)
+        pieChart.addSegment(s2, sf2)
+        pieChart.addSegment(s3, sf3)
+        pieChart.addSegment(s4, sf4)
 
-        button.setOnClickListener {
-            liveDataCost.observe(viewLifecycleOwner, { text1.text = "Общие расходы: $it" })
-            liveDataMileage.observe(viewLifecycleOwner, { text2.text = "Пробег: $it" })
-        }
 
-        
+
+
 
         return root
     }
+
+
 }
